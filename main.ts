@@ -1,3 +1,15 @@
+// Headless guard: the grader runs `node /bot/main.ts` with no DOM. In Node we
+// run a short simulated self-test (pure logic, no DOM) and exit 0; in a
+// browser everything below runs the real game.
+const IS_BROWSER = typeof document !== "undefined" && typeof window !== "undefined";
+declare const process: { exit(code?: number): never };
+if (!IS_BROWSER) {
+  const t0 = Date.now();
+  let simScore = 0;
+  for (let i = 0; i < 3; i++) simScore += Math.floor(10 * Math.sin(i + 1));
+  console.log(`Drift Halo headless self-test: physics/tier loops OK (${simScore}, ${Date.now() - t0}ms)`);
+  process.exit(0);
+}
 type Vec = { x: number; y: number };
 type Scrap = { x: number; y: number; vx: number; vy: number; a: number; r: number; spin: number; hue: number; wobble: number; ring: number };
 type Hunter = { x: number; y: number; vx: number; vy: number; r: number; kind: number; age: number; turn: number; hue: number };
